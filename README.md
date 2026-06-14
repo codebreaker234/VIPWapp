@@ -17,10 +17,10 @@
 Ghost Mode · Anti Revoke · HD Media · Call Recording · 100+ Features · No LSPosed</p>
 
 <p>
-  <a href="https://github.com/YOUR_USERNAME/VIPWapp/releases/latest">
+  <a href="https://github.com/deardmme-source/VIPWapp/releases">
     <img src="https://img.shields.io/github/v/release/YOUR_USERNAME/VIPWapp?style=for-the-badge&logo=github&color=25D366&labelColor=0d1117&label=Download"/>
   </a>
-  <a href="https://github.com/YOUR_USERNAME/VIPWapp/releases">
+  <a href="https://https://github.com/deardmme-source/VIPWapp/releases">
     <img src="https://img.shields.io/github/downloads/YOUR_USERNAME/VIPWapp/total?style=for-the-badge&logo=android&color=128C7E&labelColor=0d1117&label=Total+Downloads"/>
   </a>
   <a href="https://github.com/YOUR_USERNAME/VIPWapp/stargazers">
