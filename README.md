@@ -361,8 +361,8 @@ VIP Wapp is an **independent project**, not affiliated with WhatsApp LLC or Meta
 | Platform | Link |
 |---|---|
 | 🐛 Bug Reports | [Open a GitHub Issue](https://github.com/YOUR_USERNAME/VIPWapp/issues) |
-| 💬 Telegram Group | [Join Community](https://t.me/YOUR_TELEGRAM_GROUP) |
-| 📢 Telegram Channel | [Get Updates](https://t.me/YOUR_TELEGRAM_CHANNEL) |
+| 💬 Telegram Group | [Join Community](https://t.me/VIPWapk) |
+| 📢 Telegram Channel | [Get Updates](https://t.me/VIPWapk) |
 | ⭐ Show Support | [Star this Repo ↗](https://github.com/YOUR_USERNAME/VIPWapp) |
 
 </div>
