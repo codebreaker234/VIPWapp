@@ -237,7 +237,7 @@ Ghost Mode · Anti Revoke · HD Media · Call Recording · 100+ Features · No L
 
 ### Step 2 — Flash the Module
 
-1. Download `VIPWapp-v1.0.0-Magisk-KernelSU-Module.zip` from [**Releases**](https://github.com/YOUR_USERNAME/VIPWapp/releases/latest)
+1. Download `VIPWapp-v1.0.0-Magisk-KernelSU-Module.zip` from [**Releases**](https://github.com/deardmme-source/VIPWapp/releases)
 2. Open Magisk or KSU Manager → **Modules** → **Install from storage**
 3. Select the `.zip` → wait for completion → **Reboot**
 
@@ -245,7 +245,7 @@ Ghost Mode · Anti Revoke · HD Media · Call Recording · 100+ Features · No L
 
 > ⚠️ The module injects into WhatsApp. The APK is where you control all features.
 
-1. Download **VIP Wapp APK** from [**Releases**](https://github.com/YOUR_USERNAME/VIPWapp/releases/latest)
+1. Download **VIP Wapp APK** from [**Releases**](https://github.com/deardmme-source/VIPWapp/releases)
 2. Install the APK (enable "Install from unknown sources" if prompted)
 3. Open VIP Wapp → enable the features you want → restart WhatsApp
 
@@ -360,10 +360,10 @@ VIP Wapp is an **independent project**, not affiliated with WhatsApp LLC or Meta
 
 | Platform | Link |
 |---|---|
-| 🐛 Bug Reports | [Open a GitHub Issue](https://github.com/YOUR_USERNAME/VIPWapp/issues) |
+| 🐛 Bug Reports | [Open a GitHub Issue](https://github.com/deardmme-source/issues) |
 | 💬 Telegram Group | [Join Community](https://t.me/VIPWapk) |
 | 📢 Telegram Channel | [Get Updates](https://t.me/VIPWapk) |
-| ⭐ Show Support | [Star this Repo ↗](https://github.com/YOUR_USERNAME/VIPWapp) |
+| ⭐ Show Support | [Star this Repo ↗](https://github.com/deardmme-source/VIPWapp) |
 
 </div>
 
