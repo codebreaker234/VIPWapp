@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VIP Wapp</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #07080F;
+  --surface: #0F1018;
+  --card: #14151F;
+  --card2: #1A1B28;
+  --border: #22233A;
+  --border2: #2E2F4A;
+  --accent: #6C63FF;
+  --accent-glow: rgba(108,99,255,0.25);
+  --green: #22D17A;
+  --green-bg: rgba(34,209,122,0.1);
+  --red: #FF4D6D;
+  --red-bg: rgba(255,77,109,0.1);
+  --yellow: #FFB830;
+  --yellow-bg: rgba(255,184,48,0.1);
+  --blue: #4DAAFF;
+  --blue-bg: rgba(77,170,255,0.1);
+  --purple-bg: rgba(108,99,255,0.1);
+  --text: #EEEEFF;
+  --text2: #7778AA;
+  --text3: #44455E;
+  --r: 16px;
+  --r-sm: 11px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--bg);
+  padding: 14px 18px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  z-index: 10;
+}
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-icon {
+  width:38px; height:38px;
+  background: linear-gradient(135deg, var(--accent), #9B8FFF);
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.brand-name { font-size:18px; font-weight:800; letter-spacing:-0.5px; }
+.brand-name span { color: var(--accent); }
+.brand-ver { font-size:10px; color:var(--text2); font-weight:600; margin-top:1px; letter-spacing:1px; }
+.topbar-right { display:flex; gap:8px; }
+.icon-btn {
+  width:36px; height:36px;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-size:16px; cursor:pointer; transition:.15s;
+}
+.icon-btn:active { transform:scale(0.9); }
+
+/* ── STATUS BAR ── */
+.status-strip {
+  background: linear-gradient(90deg, rgba(34,209,122,0.08), rgba(108,99,255,0.08));
+  border-bottom: 1px solid var(--border);
+  padding: 8px 18px;
+  display: flex; align-items:center; gap:8px;
+  flex-shrink:0;
+}
+.status-dot-live {
+  width:8px; height:8px; border-radius:50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: blink 1.8s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.status-strip span { font-size:12px; font-weight:600; color:var(--green); }
+.status-strip .sep { flex:1; }
+.status-strip .counts { font-size:11px; color:var(--text2); }
+.status-strip .counts b { color:var(--accent); }
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  display:flex; gap:0;
+  background:var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink:0;
+  overflow-x:auto; scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar { display:none; }
+.ntab {
+  flex:0 0 auto;
+  padding: 11px 16px 10px;
+  font-size:12px; font-weight:700;
+  color:var(--text2);
+  cursor:pointer; transition:.2s;
+  border-bottom: 2.5px solid transparent;
+  white-space:nowrap;
+  letter-spacing:0.3px;
+}
+.ntab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+/* ── SCROLL AREA ── */
+.scroll-area {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding: 14px 14px 80px;
+  scrollbar-width:thin; scrollbar-color: var(--border) transparent;
+}
+.scroll-area::-webkit-scrollbar { width:3px; }
+.scroll-area::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+
+/* ── PANEL ── */
+.panel { display:none; }
+.panel.active { display:block; }
+
+/* ── GROUP ── */
+.group { margin-bottom:20px; }
+.group-label {
+  font-size:10px; font-weight:800;
+  color:var(--text2); letter-spacing:1.8px;
+  text-transform:uppercase;
+  margin-bottom:8px; padding:0 2px;
+  display:flex; align-items:center; gap:8px;
+}
+.group-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── FEATURE ROW ── */
+.feat {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  padding:12px 14px;
+  margin-bottom:6px;
+  display:flex; align-items:center; gap:12px;
+  cursor:pointer; transition:all .15s;
+  user-select:none;
+}
+.feat:active { transform:scale(0.985); }
+.feat.on { border-color:rgba(108,99,255,0.3); background:rgba(108,99,255,0.04); }
+.feat-icon {
+  width:38px; height:38px; border-radius:11px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; flex-shrink:0;
+}
+.fi-p { background:var(--purple-bg); }
+.fi-g { background:var(--green-bg); }
+.fi-r { background:var(--red-bg); }
+.fi-y { background:var(--yellow-bg); }
+.fi-b { background:var(--blue-bg); }
+
+.feat-info { flex:1; min-width:0; }
+.feat-info h4 { font-size:13px; font-weight:700; color:var(--text); line-height:1.3; }
+.feat-info p  { font-size:11px; color:var(--text2); margin-top:2px; line-height:1.4; }
+
+/* ── TOGGLE ── */
+.tog {
+  width:44px; height:24px; border-radius:12px;
+  background:var(--border2); position:relative;
+  flex-shrink:0; transition:.25s;
+}
+.tog.on { background:var(--accent); }
+.tog::after {
+  content:''; position:absolute;
+  width:18px; height:18px; border-radius:50%;
+  background:#fff; top:3px; left:3px;
+  transition:.25s; box-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+.tog.on::after { left:23px; }
+
+/* ── COLOR PICKER ROW ── */
+.color-row {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:12px 14px;
+  margin-bottom:6px; display:flex; align-items:center; gap:12px;
+}
+.color-row .feat-info { flex:1; }
+.color-swatch {
+  width:34px; height:34px; border-radius:9px;
+  border:2px solid var(--border2); cursor:pointer;
+  flex-shrink:0; transition:.15s;
+}
+.color-swatch:active { transform:scale(0.9); }
+
+/* ── SLIDER ROW ── */
+.slider-row {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:12px 14px;
+  margin-bottom:6px;
+}
+.slider-row .sr-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.slider-row h4 { font-size:13px; font-weight:700; flex:1; }
+.slider-row .val { font-size:12px; color:var(--accent); font-weight:700; }
+input[type=range] {
+  width:100%; height:4px; accent-color:var(--accent);
+  background:var(--border2); border-radius:4px; outline:none; border:none;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position:absolute; bottom:0; left:0; right:0;
+  background:rgba(7,8,15,0.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex; padding:8px 0 20px;
+  z-index:10;
+}
+.bnav {
+  flex:1; display:flex; flex-direction:column;
+  align-items:center; gap:3px;
+  cursor:pointer; padding:4px 0; transition:.15s;
+}
+.bnav:active { transform:scale(0.88); }
+.bnav .bi { font-size:20px; line-height:1; }
+.bnav .bl { font-size:10px; font-weight:700; color:var(--text2); }
+.bnav.active .bl { color:var(--accent); }
+.bnav.active .bi { filter:drop-shadow(0 0 6px var(--accent)); }
+
+/* ── FULL SCREEN OVERLAY ── */
+.overlay {
+  position:absolute; inset:0;
+  background:var(--bg); z-index:50;
+  display:none; flex-direction:column;
+  overflow:hidden;
+}
+.overlay.open { display:flex; }
+.ov-header {
+  padding:14px 18px;
+  display:flex; align-items:center; gap:12px;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.back-btn {
+  width:36px; height:36px; background:var(--card);
+  border:1px solid var(--border); border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; cursor:pointer;
+}
+.back-btn:active { transform:scale(0.9); }
+.ov-header h2 { font-size:17px; font-weight:800; }
+.ov-scroll { flex:1; overflow-y:auto; padding:14px; }
+
+/* ── ABOUT ── */
+.about-hero {
+  text-align:center; padding:24px 20px 20px;
+}
+.about-logo {
+  width:80px; height:80px;
+  background:linear-gradient(135deg, var(--accent), #9B8FFF);
+  border-radius:24px; margin:0 auto 14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:40px;
+  box-shadow:0 8px 32px var(--accent-glow);
+}
+.about-hero h1 { font-size:26px; font-weight:800; }
+.about-hero h1 span { color:var(--accent); }
+.about-hero p { font-size:13px; color:var(--text2); margin-top:6px; }
+.ver-tag {
+  display:inline-block; margin-top:12px;
+  background:var(--purple-bg); color:var(--accent);
+  border:1px solid rgba(108,99,255,0.3);
+  border-radius:20px; padding:5px 16px;
+  font-size:12px; font-weight:700;
+}
+.info-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r-sm); padding:12px 16px;
+  margin-bottom:6px; display:flex;
+  align-items:center; justify-content:space-between;
+}
+.info-card .lbl { font-size:13px; color:var(--text2); }
+.info-card .val { font-size:13px; font-weight:700; }
+.val-green { color:var(--green); }
+.val-red   { color:var(--red); }
+.action-btn {
+  width:100%; padding:15px;
+  border:none; border-radius:var(--r-sm);
+  font-size:14px; font-weight:800;
+  cursor:pointer; margin-bottom:8px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:.15s; font-family:inherit;
+}
+.action-btn:active { transform:scale(0.97); opacity:.9; }
+.btn-accent { background:linear-gradient(135deg,var(--accent),#9B8FFF); color:#fff; }
+.btn-card   { background:var(--card); color:var(--text); border:1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon">💎</div>
+    <div>
+      <div class="brand-name">VIP <span>Wapp</span></div>
+      <div class="brand-ver">v1.0.0 • MODULE ACTIVE</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="icon-btn" onclick="openAbout()">ℹ️</div>
+    <div class="icon-btn" onclick="openSearch()">🔍</div>
+  </div>
+</div>
+
+<!-- STATUS STRIP -->
+<div class="status-strip">
+  <div class="status-dot-live"></div>
+  <span>Zygisk Active</span>
+  <div class="sep"></div>
+  <div class="counts"><b id="activeCount">0</b> enabled of <b>70</b> features</div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <div class="ntab active" onclick="switchTab('privacy',this)">🔒 Privacy</div>
+  <div class="ntab" onclick="switchTab('home',this)">🏠 Home</div>
+  <div class="ntab" onclick="switchTab('general',this)">⚡ General</div>
+  <div class="ntab" onclick="switchTab('media',this)">🎬 Media</div>
+  <div class="ntab" onclick="switchTab('custom',this)">🎨 Customize</div>
+  <div class="ntab" onclick="switchTab('others',this)">➕ Others</div>
+</div>
+
+<!-- SCROLL AREA -->
+<div class="scroll-area" id="mainScroll">
+
+<!-- ═══════════ PRIVACY ═══════════ -->
+<div id="panel-privacy" class="panel active">
+
+  <div class="group">
+    <div class="group-label">Forwarding</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🏷️</div>
+      <div class="feat-info"><h4>Hide Forwarded Tag</h4><p>Remove "Forwarded" label from messages</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">♾️</div>
+      <div class="feat-info"><h4>Remove Forward Limit</h4><p>Forward to unlimited contacts at once</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">📌</div>
+      <div class="feat-info"><h4>Disable Pinned Chats Limit</h4><p>Pin as many chats as you want</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Last Seen & Status</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🕐</div>
+      <div class="feat-info"><h4>Freeze Last Seen</h4><p>Lock your last seen to a fixed time</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">👁️</div>
+      <div class="feat-info"><h4>Hide Status View</h4><p>View statuses without being seen</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">✅</div>
+      <div class="feat-info"><h4>Hide Blue Ticks</h4><p>Read messages without sending read receipts</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🔇</div>
+      <div class="feat-info"><h4>Hide View Once & Audio Seen</h4><p>Open view-once without marking as seen</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">📬</div>
+      <div class="feat-info"><h4>Hide Delivered</h4><p>Hide double tick delivered indicator</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">⌨️</div>
+      <div class="feat-info"><h4>Hide Typing</h4><p>Type without showing "typing..." status</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🎙️</div>
+      <div class="feat-info"><h4>Hide Recording Audio</h4><p>Record voice notes invisibly</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">View Once</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🔓</div>
+      <div class="feat-info"><h4>Disable View Once</h4><p>View media multiple times freely</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">↩️</div>
+      <div class="feat-info"><h4>Send Blue Ticks upon Reply</h4><p>Mark as read only when you reply</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Messages</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🗑️</div>
+      <div class="feat-info"><h4>Delete for Everyone on All Messages</h4><p>Delete any message regardless of time</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">📝</div>
+      <div class="feat-info"><h4>Show Edited Message History</h4><p>See all previous edits of a message</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🔽</div>
+      <div class="feat-info"><h4>Remove See More Button</h4><p>Always show full message without truncation</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🛡️</div>
+      <div class="feat-info"><h4>Anti Revoke Status</h4><p>Keep deleted statuses visible</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🚫</div>
+      <div class="feat-info"><h4>Anti Revoke Message</h4><p>Keep deleted messages in your chat</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">⏳</div>
+      <div class="feat-info"><h4>Anti Disappearing Messages</h4><p>Prevent auto-delete of disappearing messages</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🔄</div>
+      <div class="feat-info"><h4>Recover Deleted Messages</h4><p>Restore messages deleted by contacts</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Ghost & Online</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">👻</div>
+      <div class="feat-info"><h4>Ghost Mode</h4><p>Completely invisible — no ticks, no seen, no typing</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🟢</div>
+      <div class="feat-info"><h4>Always Online</h4><p>Show online status permanently</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🔐</div>
+      <div class="feat-info"><h4>Custom Privacy per Contact</h4><p>Set different privacy rules per contact</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Calls</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">📞</div>
+      <div class="feat-info"><h4>Call Recording</h4><p>Auto-record WhatsApp voice & video calls</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🚫</div>
+      <div class="feat-info"><h4>Call Privacy & Blocking</h4><p>Block calls from unknown or specific contacts</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">ℹ️</div>
+      <div class="feat-info"><h4>Call Information</h4><p>Show detailed info on incoming calls</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">📋</div>
+      <div class="feat-info"><h4>Call Whitelist / Blocklist</h4><p>Allow calls only from selected contacts</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Search</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🔍</div>
+      <div class="feat-info"><h4>Global Search</h4><p>Search across all chats and media</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ HOME ═══════════ -->
+<div id="panel-home" class="panel">
+  <div class="group">
+    <div class="group-label">Profile Display</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">👤</div>
+      <div class="feat-info"><h4>Show Name</h4><p>Display contact name on home screen</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">📄</div>
+      <div class="feat-info"><h4>Show Bio</h4><p>Show contact bio below name in list</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🟢</div>
+      <div class="feat-info"><h4>Show Online Dot in Conversation List</h4><p>Green dot when contact is online</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Chat List</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🔕</div>
+      <div class="feat-info"><h4>Show DND Button</h4><p>Quick DND toggle button on home</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">👥</div>
+      <div class="feat-info"><h4>Separate Groups</h4><p>Show groups in a separate tab</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">📂</div>
+      <div class="feat-info"><h4>Hide Archived Chats</h4><p>Hide archived section from home</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">📡</div>
+      <div class="feat-info"><h4>Show Chat Broadcast Icon</h4><p>Show broadcast icon in chat list</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🔎</div>
+      <div class="feat-info"><h4>Filter Chats</h4><p>Advanced filter options on home screen</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🎞️</div>
+      <div class="feat-info"><h4>List Animations</h4><p>Smooth animations for chat list</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">UI Elements</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🗂️</div>
+      <div class="feat-info"><h4>Remove Channel Recommendations</h4><p>Hide suggested channels on home</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🚫</div>
+      <div class="feat-info"><h4>Hide Tabs on Home</h4><p>Remove Chats/Status/Calls tabs</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">📵</div>
+      <div class="feat-info"><h4>Disable Channels</h4><p>Completely hide WhatsApp Channels</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">📸</div>
+      <div class="feat-info"><h4>Enable IGStatus on Home Screen</h4><p>Instagram-style status view</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🖼️</div>
+      <div class="feat-info"><h4>Wallpaper in Home Screen</h4><p>Set custom wallpaper on chat list</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ GENERAL ═══════════ -->
+<div id="panel-general" class="panel">
+  <div class="group">
+    <div class="group-label">Display</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🕛</div>
+      <div class="feat-info"><h4>Time in 12-Hour Format</h4><p>Switch timestamps to AM/PM format</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">⏱️</div>
+      <div class="feat-info"><h4>Seconds on Timestamp</h4><p>Show seconds in message time</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🔲</div>
+      <div class="feat-info"><h4>Buttons Stroke</h4><p>Add stroke outline to buttons</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🖼️</div>
+      <div class="feat-info"><h4>Menu Icons</h4><p>Show icons in context menus</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">⭕</div>
+      <div class="feat-info"><h4>Outlined Icons</h4><p>Use outlined style for all icons</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">⚙️</div>
+      <div class="feat-info"><h4>New Settings Style</h4><p>Modern redesigned settings layout</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🌓</div>
+      <div class="feat-info"><h4>Theme Mode Selection</h4><p>Force light, dark or system theme</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">⚡</div>
+      <div class="feat-info"><h4>Lite Mode</h4><p>Reduce animations for better performance</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🇬🇧</div>
+      <div class="feat-info"><h4>Force English</h4><p>Override app language to English</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">System</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🛡️</div>
+      <div class="feat-info"><h4>Bootloader Spoofer</h4><p>Spoof bootloader status to avoid ban</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🤖</div>
+      <div class="feat-info"><h4>Tasker Automation</h4><p>Integrate with Tasker app actions</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Notifications & Toasts</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🟢</div>
+      <div class="feat-info"><h4>Show Toast on Contact Online</h4><p>Notify when a contact comes online</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🗑️</div>
+      <div class="feat-info"><h4>Toast on Message Delete</h4><p>Alert when someone deletes a message</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">👁️</div>
+      <div class="feat-info"><h4>Toast on Viewed Message</h4><p>Alert when your message is read</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">📊</div>
+      <div class="feat-info"><h4>Toast on Viewed Status</h4><p>Alert when someone views your status</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Chat Enhancements</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🌐</div>
+      <div class="feat-info"><h4>Google Translate Integration</h4><p>Translate messages inline with one tap</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">👆</div>
+      <div class="feat-info"><h4>Double Click to React</h4><p>Quick emoji react on double tap</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">😎</div>
+      <div class="feat-info"><h4>Custom Reaction Emoji</h4><p>Set your own default reaction emoji</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🔄</div>
+      <div class="feat-info"><h4>Disable Auto Status</h4><p>Prevent WhatsApp from auto-posting statuses</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">📋</div>
+      <div class="feat-info"><h4>Enable Copy Status</h4><p>Copy any status text to clipboard</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MEDIA ═══════════ -->
+<div id="panel-media" class="panel">
+  <div class="group">
+    <div class="group-label">Downloads</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">📥</div>
+      <div class="feat-info"><h4>Download Status</h4><p>Save any photo or video status</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">🔓</div>
+      <div class="feat-info"><h4>Download View Once</h4><p>Save view-once media to gallery</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">📁</div>
+      <div class="feat-info"><h4>Custom Download Location</h4><p>Choose where media gets saved</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">☁️</div>
+      <div class="feat-info"><h4>Force Restore Cloud Backup</h4><p>Restore backup from any account</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Quality & Sending</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🖼️</div>
+      <div class="feat-info"><h4>HD Quality Images</h4><p>Send images without compression</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🎞️</div>
+      <div class="feat-info"><h4>HD Quality Videos</h4><p>Send videos in full HD quality</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🎬</div>
+      <div class="feat-info"><h4>Send Videos in 60FPS</h4><p>Send smooth 60fps videos</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">📐</div>
+      <div class="feat-info"><h4>Send Videos in Original Resolution</h4><p>No downscaling on video send</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">📦</div>
+      <div class="feat-info"><h4>Increased Video Size Limit</h4><p>Send videos larger than 16MB</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Audio</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">📵</div>
+      <div class="feat-info"><h4>Disable Audio Sensor (Proximity)</h4><p>Play audio through speaker always</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">📝</div>
+      <div class="feat-info"><h4>Audio Transcription</h4><p>Auto-transcribe voice messages to text</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">⏩</div>
+      <div class="feat-info"><h4>Voice Note Speed Control</h4><p>Custom playback speed for voice notes</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🎵</div>
+      <div class="feat-info"><h4>Send Audio as Voice / Audio Note</h4><p>Choose how audio files are sent</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Previews</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🖼️</div>
+      <div class="feat-info"><h4>Enable Media Preview</h4><p>Preview media before opening fully</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CUSTOMIZE ═══════════ -->
+<div id="panel-custom" class="panel">
+  <div class="group">
+    <div class="group-label">Colors</div>
+    <div class="color-row">
+      <div class="feat-icon fi-p">🎨</div>
+      <div class="feat-info"><h4>Primary Color</h4><p>Main UI accent color</p></div>
+      <input type="color" class="color-swatch" value="#6C63FF" onchange="this.style.background=this.value">
+    </div>
+    <div class="color-row">
+      <div class="feat-icon fi-b">🖌️</div>
+      <div class="feat-info"><h4>Secondary Color</h4><p>Secondary elements color</p></div>
+      <input type="color" class="color-swatch" value="#4DAAFF" onchange="this.style.background=this.value">
+    </div>
+    <div class="color-row">
+      <div class="feat-icon fi-g">🏠</div>
+      <div class="feat-info"><h4>Background Color</h4><p>App background color</p></div>
+      <input type="color" class="color-swatch" value="#07080F" onchange="this.style.background=this.value">
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Bubbles</div>
+    <div class="color-row">
+      <div class="feat-icon fi-g">◀️</div>
+      <div class="feat-info"><h4>Left Bubble Color</h4><p>Incoming message bubble</p></div>
+      <input type="color" class="color-swatch" value="#1A1B28" onchange="this.style.background=this.value">
+    </div>
+    <div class="color-row">
+      <div class="feat-icon fi-p">▶️</div>
+      <div class="feat-info"><h4>Right Bubble Color</h4><p>Outgoing message bubble</p></div>
+      <input type="color" class="color-swatch" value="#6C63FF" onchange="this.style.background=this.value">
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Wallpaper</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🖼️</div>
+      <div class="feat-info"><h4>Wallpaper & Transparency Settings</h4><p>Set custom chat wallpaper + opacity</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">Theme</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🗂️</div>
+      <div class="feat-info"><h4>Hide Tabs</h4><p>Remove bottom tab bar in WhatsApp</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">🔧</div>
+      <div class="feat-info"><h4>Custom Filters and Theme</h4><p>Apply custom color filters to UI</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">💻</div>
+      <div class="feat-info"><h4>Custom CSS Themes</h4><p>Inject CSS for full UI customization</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">📏</div>
+      <div class="feat-info"><h4>Custom DPI</h4><p>Adjust screen density for WhatsApp</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🎭</div>
+      <div class="feat-info"><h4>Theme Manager</h4><p>Install and switch between themes</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">😄</div>
+      <div class="feat-info"><h4>Animation Emojis</h4><p>Enable animated emoji reactions</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-label">UI Components</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">📋</div>
+      <div class="feat-info"><h4>New Context Menu UI</h4><p>Modern redesigned long-press menu</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">👑</div>
+      <div class="feat-info"><h4>Show Admin Group Icon</h4><p>Badge icon for group admins</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">🗂️</div>
+      <div class="feat-info"><h4>Menu with Icons</h4><p>Show icons in all menus</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">🎨</div>
+      <div class="feat-info"><h4>Status Style Customization</h4><p>Custom look for status viewer</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">📷</div>
+      <div class="feat-info"><h4>Old Statuses UI</h4><p>Restore classic status layout</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-r">✏️</div>
+      <div class="feat-info"><h4>Custom Colors for Text Status</h4><p>Pick colors for text status background</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ OTHERS ═══════════ -->
+<div id="panel-others" class="panel">
+  <div class="group">
+    <div class="group-label">Miscellaneous</div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-p">📞</div>
+      <div class="feat-info"><h4>Selection of Call Type</h4><p>Choose voice or video call by default</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-y">🎟️</div>
+      <div class="feat-info"><h4>Confirmation to Send Sticker</h4><p>Confirm before sending any sticker</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-b">😶</div>
+      <div class="feat-info"><h4>Disable Default Emojis</h4><p>Use system emojis instead of WA ones</p></div>
+      <div class="tog"></div>
+    </div>
+    <div class="feat" onclick="tog(this)">
+      <div class="feat-icon fi-g">📌</div>
+      <div class="feat-info"><h4>Stamp Copied Messages</h4><p>Add watermark when copying messages</p></div>
+      <div class="tog"></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end scroll-area -->
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="bnav active" onclick="switchBottom('privacy',this)">
+    <div class="bi">🔒</div><div class="bl">Privacy</div>
+  </div>
+  <div class="bnav" onclick="switchBottom('media',this)">
+    <div class="bi">🎬</div><div class="bl">Media</div>
+  </div>
+  <div class="bnav" onclick="switchBottom('custom',this)">
+    <div class="bi">🎨</div><div class="bl">Style</div>
+  </div>
+  <div class="bnav" onclick="openAbout()">
+    <div class="bi">ℹ️</div><div class="bl">About</div>
+  </div>
+</div>
+
+<!-- ABOUT OVERLAY -->
+<div class="overlay" id="aboutOverlay">
+  <div class="ov-header">
+    <div class="back-btn" onclick="closeOverlay('aboutOverlay')">←</div>
+    <h2>About VIP Wapp</h2>
+  </div>
+  <div class="ov-scroll">
+    <div class="about-hero">
+      <div class="about-logo">💎</div>
+      <h1>VIP <span>Wapp</span></h1>
+      <p>Professional WhatsApp Enhancer</p>
+      <div class="ver-tag">Version 1.0.0 • Build 100</div>
+    </div>
+    <div style="padding:0 0 14px;">
+      <div class="group-label" style="margin-bottom:10px;">Module Status</div>
+      <div class="info-card"><span class="lbl">Zygisk Module</span><span class="val val-green">✅ Active</span></div>
+      <div class="info-card"><span class="lbl">WhatsApp</span><span class="val val-green">✅ Detected</span></div>
+      <div class="info-card"><span class="lbl">Root Manager</span><span class="val">KernelSU / Magisk</span></div>
+      <div class="info-card"><span class="lbl">Android API</span><span class="val">34+</span></div>
+      <div class="info-card"><span class="lbl">Architecture</span><span class="val">arm64-v8a</span></div>
+      <div class="info-card"><span class="lbl">Total Features</span><span class="val" style="color:var(--accent)">70</span></div>
+    </div>
+    <button class="action-btn btn-accent" onclick="alert('Checking GitHub for updates...')">⬆️ Check for Updates</button>
+    <button class="action-btn btn-card" onclick="alert('Opening GitHub...')">⭐ Star on GitHub</button>
+    <button class="action-btn btn-card" onclick="alert('Opening Telegram...')">💬 Join Telegram</button>
+    <div style="text-align:center;margin-top:20px;color:var(--text2);font-size:12px;line-height:1.8;">
+      Made with 💜 by VIP Wapp Team<br>
+      <span style="font-size:10px;opacity:0.5;">For educational & personal use only</span>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div class="overlay" id="searchOverlay">
+  <div class="ov-header">
+    <div class="back-btn" onclick="closeOverlay('searchOverlay')">←</div>
+    <h2>Search Features</h2>
+  </div>
+  <div style="padding:12px 14px; flex-shrink:0;">
+    <input id="searchInput" type="text" placeholder="Search 70 features..."
+      oninput="doSearch(this.value)"
+      style="width:100%;background:var(--card);border:1px solid var(--border2);border-radius:var(--r-sm);padding:12px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;">
+  </div>
+  <div class="ov-scroll" id="searchResults" style="padding:0 14px 20px;"></div>
+</div>
+
+<script>
+// ── All features data ──────────────────────────────────────────────────────
+const ALL = [
+  // Privacy
+  {n:'Hide Forwarded Tag',d:'Remove "Forwarded" label',tab:'privacy'},
+  {n:'Remove Forward Limit',d:'Forward to unlimited contacts',tab:'privacy'},
+  {n:'Disable Pinned Chats Limit',d:'Pin as many chats as you want',tab:'privacy'},
+  {n:'Freeze Last Seen',d:'Lock your last seen timestamp',tab:'privacy'},
+  {n:'Hide Status View',d:'View statuses without being seen',tab:'privacy'},
+  {n:'Hide Blue Ticks',d:'Read without sending receipts',tab:'privacy'},
+  {n:'Hide View Once & Audio Seen',d:'Open view-once invisibly',tab:'privacy'},
+  {n:'Hide Delivered',d:'Hide double tick indicator',tab:'privacy'},
+  {n:'Hide Typing',d:"Type without showing 'typing...'",tab:'privacy'},
+  {n:'Hide Recording Audio',d:'Record voice notes invisibly',tab:'privacy'},
+  {n:'Disable View Once',d:'View media multiple times',tab:'privacy'},
+  {n:'Send Blue Ticks upon Reply',d:'Mark read only when you reply',tab:'privacy'},
+  {n:'Delete for Everyone on All Messages',d:'Delete any message anytime',tab:'privacy'},
+  {n:'Show Edited Message History',d:'See all previous edits',tab:'privacy'},
+  {n:'Remove See More Button',d:'Always show full message',tab:'privacy'},
+  {n:'Anti Revoke Status',d:'Keep deleted statuses visible',tab:'privacy'},
+  {n:'Anti Revoke Message',d:'Keep deleted messages',tab:'privacy'},
+  {n:'Anti Disappearing Messages',d:'Prevent auto-delete',tab:'privacy'},
+  {n:'Custom Privacy per Contact',d:'Different rules per contact',tab:'privacy'},
+  {n:'Ghost Mode',d:'Completely invisible mode',tab:'privacy'},
+  {n:'Always Online',d:'Show online status always',tab:'privacy'},
+  {n:'Call Recording',d:'Auto-record WA calls',tab:'privacy'},
+  {n:'Call Privacy & Blocking',d:'Block unknown callers',tab:'privacy'},
+  {n:'Call Information',d:'Details on incoming calls',tab:'privacy'},
+  {n:'Call Whitelist/Blocklist',d:'Control who can call you',tab:'privacy'},
+  {n:'Global Search',d:'Search all chats & media',tab:'privacy'},
+  {n:'Recover Deleted Messages',d:'Restore deleted messages',tab:'privacy'},
+  // Home
+  {n:'Show Name',d:'Display name on home screen',tab:'home'},
+  {n:'Show Bio',d:'Show bio below name',tab:'home'},
+  {n:'Show DND Button',d:'Quick DND toggle on home',tab:'home'},
+  {n:'Separate Groups',d:'Groups in separate tab',tab:'home'},
+  {n:'Hide Archived Chats',d:'Hide archived section',tab:'home'},
+  {n:'Show Online Dot',d:'Green dot when online',tab:'home'},
+  {n:'Remove Channel Recommendations',d:'Hide suggested channels',tab:'home'},
+  {n:'Hide Tabs on Home',d:'Remove tab bar',tab:'home'},
+  {n:'Enable IGStatus on Home',d:'Instagram-style status',tab:'home'},
+  {n:'Filter Chats',d:'Advanced filter options',tab:'home'},
+  {n:'Wallpaper in Home Screen',d:'Custom wallpaper on list',tab:'home'},
+  {n:'Show Chat Broadcast Icon',d:'Broadcast icon in list',tab:'home'},
+  {n:'List Animations',d:'Smooth chat list animations',tab:'home'},
+  {n:'Disable Channels',d:'Hide WhatsApp Channels',tab:'home'},
+  // General
+  {n:'Time in 12-Hour Format',d:'AM/PM timestamp format',tab:'general'},
+  {n:'Seconds on Timestamp',d:'Show seconds in time',tab:'general'},
+  {n:'Buttons Stroke',d:'Stroke outline on buttons',tab:'general'},
+  {n:'Menu Icons',d:'Icons in context menus',tab:'general'},
+  {n:'Outlined Icons',d:'Outlined style icons',tab:'general'},
+  {n:'New Settings Style',d:'Modern settings layout',tab:'general'},
+  {n:'Theme Mode Selection',d:'Force light/dark/system',tab:'general'},
+  {n:'Lite Mode',d:'Reduce animations',tab:'general'},
+  {n:'Force English',d:'Override app language',tab:'general'},
+  {n:'Bootloader Spoofer',d:'Avoid ban via spoofing',tab:'general'},
+  {n:'Tasker Automation',d:'Integrate with Tasker',tab:'general'},
+  {n:'Show Toast on Contact Online',d:'Notify when contact online',tab:'general'},
+  {n:'Toast on Message Delete',d:'Alert on message delete',tab:'general'},
+  {n:'Toast on Viewed Message',d:'Alert when message read',tab:'general'},
+  {n:'Google Translate Integration',d:'Translate messages inline',tab:'general'},
+  {n:'Double Click to React',d:'Quick emoji on double tap',tab:'general'},
+  {n:'Custom Reaction Emoji',d:'Default reaction emoji',tab:'general'},
+  {n:'Disable Auto Status',d:'Prevent auto-posting',tab:'general'},
+  {n:'Enable Copy Status',d:'Copy status text',tab:'general'},
+  {n:'Toast on Viewed Status',d:'Alert when status viewed',tab:'general'},
+  // Media
+  {n:'Download Status',d:'Save status photos & videos',tab:'media'},
+  {n:'Download View Once',d:'Save view-once media',tab:'media'},
+  {n:'HD Quality Videos',d:'Send full HD videos',tab:'media'},
+  {n:'HD Quality Images',d:'No image compression',tab:'media'},
+  {n:'Send videos in 60FPS',d:'Smooth 60fps video send',tab:'media'},
+  {n:'Send videos in original resolution',d:'No downscaling',tab:'media'},
+  {n:'Increased Video Size Limit',d:'Send files > 16MB',tab:'media'},
+  {n:'Disable Audio Sensor',d:'Always speaker mode',tab:'media'},
+  {n:'Audio Transcription',d:'Voice to text auto',tab:'media'},
+  {n:'Voice Note Speed Control',d:'Custom playback speed',tab:'media'},
+  {n:'Send Audio as Voice/Audio Note',d:'Choose send format',tab:'media'},
+  {n:'Enable Media Preview',d:'Preview before opening',tab:'media'},
+  {n:'Custom Download Location',d:'Choose save folder',tab:'media'},
+  {n:'Force Restore Cloud Backup',d:'Restore from any account',tab:'media'},
+  // Customize
+  {n:'Primary Color',d:'Main accent color',tab:'custom'},
+  {n:'Secondary Color',d:'Secondary color',tab:'custom'},
+  {n:'Background Color',d:'App background',tab:'custom'},
+  {n:'Left Bubble Color',d:'Incoming bubble color',tab:'custom'},
+  {n:'Right Bubble Color',d:'Outgoing bubble color',tab:'custom'},
+  {n:'Wallpaper & Transparency',d:'Chat wallpaper + opacity',tab:'custom'},
+  {n:'Hide Tabs',d:'Remove bottom tab bar',tab:'custom'},
+  {n:'Custom Filters and Theme',d:'Color filters for UI',tab:'custom'},
+  {n:'Custom CSS Themes',d:'Full CSS customization',tab:'custom'},
+  {n:'Custom DPI',d:'Adjust screen density',tab:'custom'},
+  {n:'Theme Manager',d:'Install & switch themes',tab:'custom'},
+  {n:'Animation Emojis',d:'Animated emoji reactions',tab:'custom'},
+  {n:'New Context Menu UI',d:'Modern long-press menu',tab:'custom'},
+  {n:'Show Admin Group Icon',d:'Badge for group admins',tab:'custom'},
+  {n:'Menu with Icons',d:'Icons in all menus',tab:'custom'},
+  {n:'Status Style Customization',d:'Custom status viewer look',tab:'custom'},
+  {n:'Old Statuses UI',d:'Restore classic status',tab:'custom'},
+  {n:'Custom Colors for Text Status',d:'Text status background',tab:'custom'},
+  // Others
+  {n:'Selection of Call Type',d:'Default voice or video',tab:'others'},
+  {n:'Confirmation to Send Sticker',d:'Confirm before sticker send',tab:'others'},
+  {n:'Disable Default Emojis',d:'Use system emojis',tab:'others'},
+  {n:'Stamp Copied Messages',d:'Watermark on copy',tab:'others'},
+];
+
+// ── Toggle ────────────────────────────────────────────────────────────────
+function tog(card) {
+  const t = card.querySelector('.tog');
+  if (!t) return;
+  const on = t.classList.toggle('on');
+  card.classList.toggle('on', on);
+  updateCount();
+}
+function updateCount() {
+  const c = document.querySelectorAll('.tog.on').length;
+  document.getElementById('activeCount').textContent = c;
+}
+
+// ── Tab switch ────────────────────────────────────────────────────────────
+function switchTab(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('mainScroll').scrollTop = 0;
+}
+function switchBottom(id, el) {
+  switchTab(id, document.querySelector(`.ntab[onclick*="${id}"]`) || document.querySelectorAll('.ntab')[0]);
+  document.querySelectorAll('.bnav').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── Overlays ──────────────────────────────────────────────────────────────
+function openAbout()  { document.getElementById('aboutOverlay').classList.add('open'); }
+function openSearch() {
+  document.getElementById('searchOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('searchInput').focus(), 100);
+  doSearch('');
+}
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── Search ────────────────────────────────────────────────────────────────
+function doSearch(q) {
+  const res = document.getElementById('searchResults');
+  const lower = q.toLowerCase();
+  const matches = ALL.filter(f => f.n.toLowerCase().includes(lower) || f.d.toLowerCase().includes(lower));
+  if (!matches.length) { res.innerHTML = '<div style="color:var(--text2);text-align:center;margin-top:30px;font-size:14px;">No features found</div>'; return; }
+  res.innerHTML = matches.map(f => `
+    <div class="feat" onclick="tog(this)" style="margin-bottom:6px;">
+      <div class="feat-icon fi-p">🔍</div>
+      <div class="feat-info"><h4>${f.n}</h4><p>${f.d} • <span style="color:var(--accent);font-weight:700;">${f.tab.toUpperCase()}</span></p></div>
+      <div class="tog"></div>
+    </div>`).join('');
+}
+</script>
+</body>
+</html>
