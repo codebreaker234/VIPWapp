@@ -1163,5 +1163,111 @@ function doSearch(q) {
     </div>`).join('');
 }
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadModuleStatus();
+    loadAllSettings();
+    initToggles();
+    initTabs();
+});
+
+function loadModuleStatus() {
+    try {
+        var s = JSON.parse(Android.getModuleStatus());
+        var txt = document.querySelector('.status-strip span');
+        var dot = document.querySelector('.status-dot-live');
+        if (txt) {
+            txt.textContent = s.moduleActive ? 'Module Active' : 'Module Inactive';
+            txt.style.color = s.moduleActive ? 'var(--green)' : 'var(--red)';
+        }
+        if (dot) {
+            dot.style.background = s.moduleActive ? 'var(--green)' : 'var(--red)';
+            dot.style.boxShadow = s.moduleActive ? '0 0 8px var(--green)' : '0 0 8px var(--red)';
+        }
+    } catch(e) {}
+}
+
+function loadAllSettings() {
+    try {
+        var st = JSON.parse(Android.getAllSettings());
+        document.querySelectorAll('.feat[data-key]').forEach(function(f) {
+            var k = f.getAttribute('data-key');
+            var t = f.querySelector('.tog');
+            if (st[k] === 'true') {
+                if (t) t.classList.add('on');
+                f.classList.add('on');
+            }
+        });
+        if (st.accentColor) {
+            document.documentElement.style.setProperty('--accent', st.accentColor);
+            var r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(st.accentColor);
+            if (r) {
+                var rgb = parseInt(r[1],16)+','+parseInt(r[2],16)+','+parseInt(r[3],16);
+                document.documentElement.style.setProperty('--accent-glow', 'rgba('+rgb+',0.25)');
+            }
+        }
+    } catch(e) {}
+}
+
+function initToggles() {
+    document.querySelectorAll('.tog').forEach(function(tog) {
+        tog.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var f = this.closest('.feat');
+            var k = f ? f.getAttribute('data-key') : null;
+            if (!k) return;
+            var on = this.classList.contains('on');
+            if (on) {
+                this.classList.remove('on');
+                f.classList.remove('on');
+                Android.saveSetting(k, false);
+            } else {
+                this.classList.add('on');
+                f.classList.add('on');
+                Android.saveSetting(k, true);
+            }
+        });
+    });
+    document.querySelectorAll('.feat').forEach(function(f) {
+        f.addEventListener('click', function(e) {
+            if (e.target.closest('.tog')) return;
+            var t = this.querySelector('.tog');
+            if (t) t.click();
+        });
+    });
+}
+
+function initTabs() {
+    document.querySelectorAll('.ntab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            var target = this.getAttribute('data-tab');
+            document.querySelectorAll('.ntab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            var p = document.getElementById('panel-' + target);
+            if (p) p.classList.add('active');
+        });
+    });
+}
+
+function setAccentColor(hex) {
+    document.documentElement.style.setProperty('--accent', hex);
+    var r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (r) {
+        var rgb = parseInt(r[1],16)+','+parseInt(r[2],16)+','+parseInt(r[3],16);
+        document.documentElement.style.setProperty('--accent-glow', 'rgba('+rgb+',0.25)');
+    }
+    Android.saveColorSetting('accentColor', hex);
+}
+
+function resetAll() {
+    if (confirm('Reset all settings?')) {
+        Android.clearAllSettings();
+        document.querySelectorAll('.tog').forEach(function(t) { t.classList.remove('on'); });
+        document.querySelectorAll('.feat').forEach(function(f) { f.classList.remove('on'); });
+        setAccentColor('#6C63FF');
+    }
+}
+</script>
 </body>
 </html>
